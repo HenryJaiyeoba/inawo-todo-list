@@ -48,8 +48,8 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import ThemeToggler from "./theme-toggler";
 
-// Initialize with empty arrays instead of importing sample data
 const initialEvents: Event[] = [
   {
     id: "event-1",
@@ -168,7 +168,6 @@ const initialTasks: Task[] = [
 
 export default function TodoApp() {
   const [tasks, setTasks] = useState<Task[]>(() => {
-    // Load tasks from localStorage if available
     if (typeof window !== "undefined") {
       const savedTasks = localStorage.getItem("tasks");
       return savedTasks ? JSON.parse(savedTasks) : initialTasks;
@@ -187,28 +186,23 @@ export default function TodoApp() {
     useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
 
-  // Add a Dialog for event deletion confirmation instead of using the browser's confirm
   const [eventToDelete, setEventToDelete] = useState<string | null>(null);
 
-  // Save tasks to localStorage whenever they change
   useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("tasks", JSON.stringify(tasks));
     }
   }, [tasks]);
 
-  // Filter tasks for the active event
   const eventTasks = tasks.filter((task) => task.eventId === activeEvent);
 
   const addTask = (task: Task) => {
-    // Add eventId to the task if not provided
     const taskWithEvent = {
       ...task,
       eventId: task.eventId || activeEvent,
     };
     setTasks([...tasks, taskWithEvent]);
 
-    // Show notification
     toast("Task added", {
       description: "Your task has been added successfully.",
     });
@@ -234,7 +228,6 @@ export default function TodoApp() {
         if (task.id === taskId) {
           const completed = !task.completed;
 
-          // If task is assigned to vendor, notify them
           if (task.assignedTo && completed) {
             toast("Task completed", {
               description: `Notification sent to ${
@@ -292,7 +285,7 @@ export default function TodoApp() {
             text: comment,
             timestamp: new Date().toISOString(),
             isVendor,
-            authorId: isVendor ? task.assignedTo : "user-1", // In a real app, this would be the current user's ID
+            authorId: isVendor ? task.assignedTo : "user-1",
           };
 
           return {
@@ -304,7 +297,6 @@ export default function TodoApp() {
       })
     );
 
-    // If vendor is commenting, show notification
     if (isVendor) {
       toast("New vendor comment", {
         description: "A vendor has commented on your task.",
@@ -368,7 +360,6 @@ export default function TodoApp() {
   };
 
   const deleteEvent = (eventId: string) => {
-    // Don't allow deletion if it's the only event
     if (events.length <= 1) {
       toast("Cannot delete event", {
         description:
@@ -377,15 +368,12 @@ export default function TodoApp() {
       return;
     }
 
-    // Remove the event
     const updatedEvents = events.filter((event) => event.id !== eventId);
     setEvents(updatedEvents);
 
-    // Remove all tasks associated with this event
     const updatedTasks = tasks.filter((task) => task.eventId !== eventId);
     setTasks(updatedTasks);
 
-    // Set active event to the first available event
     setActiveEvent(updatedEvents[0].id);
 
     toast("Event deleted", {
@@ -394,7 +382,6 @@ export default function TodoApp() {
   };
 
   const applyTemplate = (templateTasks: Task[]) => {
-    // Add the event ID to all template tasks
     const tasksWithEvent = templateTasks.map((task) => ({
       ...task,
       eventId: activeEvent,
@@ -408,7 +395,6 @@ export default function TodoApp() {
     });
   };
 
-  // Fix the any type with a proper type definition
   interface BudgetUpdates {
     total?: number;
     spent?: number;
@@ -448,6 +434,7 @@ export default function TodoApp() {
           )}
         </div>
         <div className="flex gap-2">
+          <ThemeToggler />
           <Button
             variant="outline"
             size="sm"
@@ -467,7 +454,6 @@ export default function TodoApp() {
         </div>
       </div>
 
-      {/* Event Selector */}
       <div className="mb-6">
         <div className="flex gap-2 overflow-x-auto pb-2">
           {events.map((event) => (
@@ -528,7 +514,6 @@ export default function TodoApp() {
             variant="ghost"
             size="sm"
             onClick={() => {
-              // In a real app, this would open a dialog to create a new event
               const newEvent = {
                 id: Date.now().toString(),
                 name: `New Event ${events.length + 1}`,
@@ -671,7 +656,6 @@ export default function TodoApp() {
         />
       )}
 
-      {/* Event Delete Confirmation Dialog */}
       <Dialog
         open={eventToDelete !== null}
         onOpenChange={(open) => !open && setEventToDelete(null)}

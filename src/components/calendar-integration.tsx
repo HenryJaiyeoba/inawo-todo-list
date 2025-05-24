@@ -41,8 +41,6 @@ export default function CalendarIntegration({
   };
 
   const handleConnect = () => {
-    // In a real app, we would connect to the selected calendars
-    // For now, we'll just close the dialog
     onClose();
   };
 

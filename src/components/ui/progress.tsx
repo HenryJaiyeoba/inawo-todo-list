@@ -13,7 +13,7 @@ interface ProgressProps
 function Progress({
   className,
   value,
-  indicatorClassName,
+  indicatorClassName, 
   ...props
 }: ProgressProps) {
   return (

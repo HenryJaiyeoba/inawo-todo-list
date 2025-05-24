@@ -20,13 +20,12 @@ import { cn } from "@/lib/utils";
 interface CalendarViewProps {
   tasks: Task[];
   onUpdateTask: (task: Task) => void;
-  event?: Event; // Added prop
+  event?: Event;
 }
 
 export default function CalendarView({
   tasks,
   onUpdateTask,
-  event, // Added prop
 }: CalendarViewProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
@@ -34,7 +33,6 @@ export default function CalendarView({
   const [showAddTaskDialog, setShowAddTaskDialog] = useState(false);
   const [viewingTaskId, setViewingTaskId] = useState<string | null>(null);
 
-  // Custom day render to show tasks on calendar
   const renderDay = (day: Date) => {
     if (!day) return null;
 
@@ -79,15 +77,7 @@ export default function CalendarView({
             onSelect={setSelectedDate}
             className="rounded-md border"
             components={{
-              Day: ({ day, ...props }) => (
-                <button {...props} className={cn(props.className, "relative")}>
-                  {day ? (
-                    renderDay(day)
-                  ) : (
-                    <div className="relative">{props.children}</div>
-                  )}
-                </button>
-              ),
+              Day: ({ date: day }) => renderDay(day),
             }}
           />
 
@@ -163,7 +153,7 @@ export default function CalendarView({
         </div>
       </div>
 
-      {/* Add Task Dialog */}
+      {/*  Task Dialog */}
       <Dialog open={showAddTaskDialog} onOpenChange={setShowAddTaskDialog}>
         <DialogContent>
           <DialogHeader>

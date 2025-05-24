@@ -36,8 +36,6 @@ export default function NotificationSettings({
   const [reminderTime, setReminderTime] = useState("1day");
 
   const handleSave = () => {
-    // In a real app, we would save these settings to a database
-    // For now, we'll just close the dialog
     onClose();
   };
 

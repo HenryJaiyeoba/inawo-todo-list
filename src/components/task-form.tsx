@@ -62,11 +62,11 @@ export default function TaskForm({
     existingTask?.recurringPattern || "weekly"
   );
 
-  const [suggestedDates, setSuggestedDates] = useState<Date[]>([
+  const suggestedDates = [
     new Date(Date.now() + 24 * 60 * 60 * 1000), // tomorrow
     new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
     new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 1 week from now
-  ]);
+  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -156,6 +156,7 @@ export default function TaskList({
   };
 
   const handleAddSubTask = (taskId: string, subTask: SubTask) => {
+    console.log("Adding subtask:", subTask);
     onAddSubTask(taskId, subTask);
     setAddingSubTaskId(null);
 
@@ -264,23 +265,20 @@ export default function TaskList({
                     onCheckedChange={() => onToggleTask(task.id)}
                     className="mt-1"
                   />
-                  <div>
-                    <CardTitle
-                      className={cn(
-                        "text-lg font-medium transition-all",
-                        task.completed
-                          ? "line-through text-muted-foreground"
-                          : ""
-                      )}
-                    >
-                      {task.title}
-                    </CardTitle>
-                    {task.description && (
-                      <CardDescription className="mt-1 text-sm">
-                        {task.description}
-                      </CardDescription>
+
+                  <CardTitle
+                    className={cn(
+                      "text-lg font-medium transition-all",
+                      task.completed ? "line-through text-muted-foreground" : ""
                     )}
-                  </div>
+                  >
+                    {task.title}
+                  </CardTitle>
+                  {task.description && (
+                    <CardDescription className="mt-1 text-sm">
+                      {task.description}
+                    </CardDescription>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -404,7 +402,7 @@ export default function TaskList({
                   {task.budget && (
                     <div className="text-xs text-muted-foreground">
                       <span className="font-medium">
-                        ${task.budget.toLocaleString()}
+                        ₦{task.budget.toLocaleString()}
                       </span>
                     </div>
                   )}

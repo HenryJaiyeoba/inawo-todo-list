@@ -41,13 +41,12 @@ export default function ProgressDashboard({
   vendors,
   event,
 }: ProgressDashboardProps) {
-  // Calculate overall progress
   const completedTasks = tasks.filter((task) => task.completed).length;
   const totalTasks = tasks.length;
   const overallProgress =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
-  // Calculate priority breakdown
+ 
   const highPriorityTasks = tasks.filter(
     (task) => task.priority === "high"
   ).length;
@@ -58,7 +57,7 @@ export default function ProgressDashboard({
     (task) => task.priority === "low"
   ).length;
 
-  // Calculate completion by priority
+ 
   const highPriorityCompleted = tasks.filter(
     (task) => task.priority === "high" && task.completed
   ).length;
@@ -113,7 +112,7 @@ export default function ProgressDashboard({
     };
   });
 
-  // Colors for charts
+ 
   const COLORS = ["#ef4444", "#f59e0b", "#10b981", "#6366f1"];
   const COMPLETION_COLORS = ["#10b981", "#e5e7eb"];
 

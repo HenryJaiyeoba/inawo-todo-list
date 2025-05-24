@@ -655,7 +655,7 @@ export default function VendorManagement({
                             new Date(
                               unassignedTasks.find(
                                 (t) => t.id === selectedTaskId
-                              )?.dueDate!
+                              )?.dueDate ?? new Date()
                             ),
                             "MMM d, yyyy"
                           )}

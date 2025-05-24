@@ -33,14 +33,7 @@ import {
   Tooltip,
 } from "recharts";
 import { DollarSign, Plus, Trash2 } from "lucide-react";
-import {
-  Chart,
-  ChartContainer,
-  ChartLegend,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartTooltipItem,
-} from "@/components/ui/chart";
+import { Chart, ChartContainer, ChartLegend } from "@/components/ui/chart";
 import {
   Select,
   SelectContent,
@@ -56,11 +49,17 @@ interface BudgetCategory {
   spent: number;
 }
 
+interface BudgetUpdates {
+  total?: number;
+  spent?: number;
+  categories?: BudgetCategory[];
+}
+
 interface BudgetTrackerProps {
   event?: Event;
   vendors?: Vendor[];
   tasks?: Task[];
-  onUpdateBudget: (updates: any) => void;
+  onUpdateBudget: (updates: BudgetUpdates) => void;
 }
 
 export default function BudgetTracker({
@@ -169,25 +168,18 @@ export default function BudgetTracker({
     });
   };
 
-  // Calculate budget metrics
   const totalBudget = budget.total || 0;
   const totalSpent = budget.spent || 0;
   const remainingBudget = totalBudget - totalSpent;
   const budgetProgress =
     totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0;
 
-  // Prepare data for charts
   const categoryData = categories.map((cat) => ({
     name: cat.name,
     allocated: cat.allocated,
     spent: cat.spent,
     remaining: cat.allocated - cat.spent,
   }));
-
-  const pieData = [
-    { name: "Spent", value: totalSpent },
-    { name: "Remaining", value: remainingBudget > 0 ? remainingBudget : 0 },
-  ];
 
   const COLORS = ["#ef4444", "#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"];
 
@@ -353,7 +345,7 @@ export default function BudgetTracker({
                           outerRadius={100}
                           fill="#8884d8"
                           label={({ name, percent }) =>
-                            `₦{name}: ₦{(percent * 100).toFixed(0)}%`
+                            `${name}: ${(percent * 100).toFixed(0)}%`
                           }
                         >
                           {categories.map((entry, index) => (
@@ -363,23 +355,16 @@ export default function BudgetTracker({
                             />
                           ))}
                         </Pie>
-                        <ChartTooltip
+                        <Tooltip
                           content={({ active, payload }) => {
                             if (active && payload && payload.length) {
                               return (
-                                <ChartTooltipContent>
-                                  <ChartTooltipItem
-                                    label={payload[0].name}
-                                    value={`₦₦{payload[0].value.toLocaleString()}`}
-                                    color={
-                                      COLORS[
-                                        payload[0].dataKey === "allocated"
-                                          ? 0
-                                          : 1
-                                      ]
-                                    }
-                                  />
-                                </ChartTooltipContent>
+                                <div className="bg-white p-2 border rounded-lg shadow">
+                                  <p className="text-sm">
+                                    {payload[0]?.name}: ₦
+                                    {payload[0]?.value?.toLocaleString()}
+                                  </p>
+                                </div>
                               );
                             }
                             return null;

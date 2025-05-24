@@ -32,7 +32,10 @@ export default function SubTaskForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title.trim()) return;
+    if (!title.trim()) {
+      console.error("Title is required");
+      return;
+    }
 
     const newSubTask: SubTask = {
       id: Date.now().toString(),
